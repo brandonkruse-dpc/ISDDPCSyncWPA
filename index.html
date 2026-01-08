@@ -15,6 +15,9 @@
   <meta name="apple-mobile-web-app-title" content="DPC Sync">
   <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3569/3569998.png">
 
+  <!-- Babel for TSX support without build step -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
@@ -41,39 +44,43 @@
       background: #475569;
     }
   </style>
+
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
     "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "peerjs": "https://esm.sh/peerjs@1.5.4"
+    "peerjs": "https://esm.sh/peerjs@1.5.4",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="index.tsx"></script>
+
+  <!-- Load main entry point with Babel -->
+  <script 
+    type="text/babel" 
+    data-type="module" 
+    data-presets="typescript,react" 
+    src="index.tsx"
+  ></script>
+
   <script>
-    // Only attempt Service Worker registration in production-like environments
-    // and avoid errors in sandboxed previews that block SW or have weird origins.
+    // Robust Service Worker registration
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
       window.addEventListener('load', () => {
-        // Using a relative string directly avoids the URL constructor issue in sandboxes
         navigator.serviceWorker.register('sw.js', { scope: './' })
-          .then(reg => {
-            console.log('Service Worker registered successfully with scope:', reg.scope);
-          })
-          .catch(err => {
-            // Log warning instead of error for preview environments that block SW
-            console.warn('Service Worker registration skipped or failed:', err.message);
-          });
+          .then(reg => console.log('SW Registered:', reg.scope))
+          .catch(err => console.warn('SW Registration failed (expected in some sandboxes):', err.message));
       });
-    } else {
-      console.log('Service Worker not supported or registration skipped (unsupported environment).');
     }
+
+    // Babel config for React 19
+    window.process = { env: { NODE_ENV: 'production' } };
   </script>
 </body>
 </html>

@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Peer, DataConnection } from 'peerjs';
-import { TimerModel, SyncRole, SyncMessage } from './types';
-import { MAX_TIMERS } from './constants';
-import { generateId } from './utils/timeUtils';
-import { TimerCard } from './components/TimerCard';
-import { AddTimerModal } from './components/AddTimerModal';
-import { generateTimerPresets } from './services/geminiService';
+import { TimerModel, SyncRole, SyncMessage } from './types.ts';
+import { MAX_TIMERS } from './constants.ts';
+import { generateId } from './utils/timeUtils.ts';
+import { TimerCard } from './components/TimerCard.tsx';
+import { AddTimerModal } from './components/AddTimerModal.tsx';
+import { generateTimerPresets } from './services/geminiService.ts';
 
 const App: React.FC = () => {
   const [timers, setTimers] = useState<TimerModel[]>([]);
@@ -24,12 +24,10 @@ const App: React.FC = () => {
 
   const isDark = theme === 'dark';
 
-  // Persist theme
   useEffect(() => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Initialize PeerJS
   useEffect(() => {
     const peer = new Peer(role === 'master' ? sessionId : undefined);
     peerRef.current = peer;
@@ -61,7 +59,6 @@ const App: React.FC = () => {
     };
   }, [role, sessionId]);
 
-  // Slave Connection Logic
   const connectToMaster = () => {
     if (!peerRef.current || !masterIdInput) return;
     setConnectionStatus('connecting');
@@ -91,7 +88,6 @@ const App: React.FC = () => {
     });
   };
 
-  // Sync Timer Ticks
   useEffect(() => {
     if (role === 'slave') return;
 
@@ -203,7 +199,6 @@ const App: React.FC = () => {
 
   return (
     <div className={`flex flex-col h-screen overflow-hidden p-4 md:p-8 transition-colors duration-300 ${isDark ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'}`}>
-      {/* Header */}
       <header className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-6">
         <div className="text-center lg:text-left flex items-center gap-4">
           <div>
@@ -232,7 +227,6 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* Sync Controls Panel */}
         <div className={`flex flex-col sm:flex-row items-center gap-4 p-3 rounded-3xl border backdrop-blur-sm ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white/80 border-slate-200 shadow-sm'}`}>
           <div className={`flex p-1 rounded-2xl border shadow-inner ${isDark ? 'bg-slate-950 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
             {(['standalone', 'master', 'slave'] as const).map((r) => (
@@ -283,7 +277,6 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Grid */}
       <main className="flex-1 overflow-auto">
         {timers.length === 0 ? (
           <div className={`h-full flex flex-col items-center justify-center space-y-6 ${isDark ? 'text-slate-700' : 'text-slate-300'}`}>
@@ -326,7 +319,6 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer Controls */}
       <footer className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
           {timers.length} of {MAX_TIMERS} Timers Active
@@ -338,21 +330,18 @@ const App: React.FC = () => {
               <button 
                 onClick={() => handleGlobalControl('START')}
                 className="p-4 text-emerald-500 hover:bg-emerald-500/10 rounded-2xl transition-all active:scale-90"
-                title="Start All"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </button>
               <button 
                 onClick={() => handleGlobalControl('PAUSE')}
                 className="p-4 text-amber-500 hover:bg-amber-500/10 rounded-2xl transition-all active:scale-90"
-                title="Pause All"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
               </button>
               <button 
                 onClick={() => handleGlobalControl('RESET')}
                 className={`p-4 rounded-2xl transition-all active:scale-90 ${isDark ? 'text-slate-500 hover:bg-slate-700/50' : 'text-slate-400 hover:bg-slate-100'}`}
-                title="Reset All"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
               </button>
