@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'isd-dpc-sync-v2';
+const CACHE_NAME = 'isd-dpc-sync-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
