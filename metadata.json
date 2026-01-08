@@ -1,0 +1,7 @@
+{
+  "name": "Copy of ISD DPC Sync",
+  "description": "Professional multi-timer application for ISD DPC teams with WebRTC synchronization and AI-powered preset generation.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

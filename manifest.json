@@ -1,0 +1,20 @@
+
+{
+  "name": "ISD DPC Sync",
+  "short_name": "DPC Sync",
+  "description": "Professional multi-timer application for ISD DPC teams with WebRTC synchronization and AI-powered preset generation.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#020617",
+  "theme_color": "#06b6d4",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3569/3569998.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

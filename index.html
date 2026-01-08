@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ISD DPC Sync</title>
+  
+  <!-- PWA & Mobile Meta -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#06b6d4">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DPC Sync">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3569/3569998.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow: hidden;
+      overscroll-behavior-y: contain;
+    }
+    .font-mono {
+      font-family: 'JetBrains+Mono', monospace;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "peerjs": "https://esm.sh/peerjs@1.5.4"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="index.tsx"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Resolve the SW path relative to the current location to avoid origin issues in sandboxes
+        const swUrl = new URL('./sw.js', window.location.href).href;
+        navigator.serviceWorker.register(swUrl, { scope: './' })
+          .then(reg => {
+            console.log('Service Worker registered successfully with scope:', reg.scope);
+          })
+          .catch(err => {
+            // Log warning instead of error for preview environments that block SW
+            console.warn('Service Worker registration skipped or failed. This is expected in some preview environments:', err.message);
+          });
+      });
+    }
+  </script>
+</body>
+</html>
